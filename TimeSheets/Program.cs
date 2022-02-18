@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+//TODO для валидации используем System.ComponentModel.Annotations https://www.nuget.org/packages/System.ComponentModel.Annotations/
 namespace TimeSheets
 {
     public class Program

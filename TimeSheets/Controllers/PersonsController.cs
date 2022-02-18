@@ -12,10 +12,10 @@ namespace TimeSheets.Controllers
     [Route("[controller]")]
     public class PersonsController : ControllerBase
     {
-        private IDBRepository _dBRepository;
+        private IDBRepository<Person> _dBRepository;
         private readonly ILogger<PersonsController> _logger;
 
-        public PersonsController(IDBRepository dBRepository, ILogger<PersonsController> logger)
+        public PersonsController(IDBRepository<Person> dBRepository, ILogger<PersonsController> logger)
         {
             _logger = logger;
             _dBRepository = dBRepository;
