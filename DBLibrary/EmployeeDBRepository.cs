@@ -6,41 +6,41 @@ using System.Threading.Tasks;
 
 namespace DBLibrary
 {
-    public class EmployeeDBRepository : IDBRepository<Employee>
+    public class EmployeeDBRepository : IEmployeeDBRepository
     {
-        public void Create(Employee entity)
+        private SQLiteDBContext db;
+        public EmployeeDBRepository(SQLiteDBContext context)
         {
-            throw new NotImplementedException();
+            db = context;
+        }
+        public async Task Create(Employee employee)
+        {
+            db.Add(employee);
+            await db.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task<Employee> Get(int id)
         {
-            throw new NotImplementedException();
+            return await db.FindAsync<Employee>(id);
         }
 
-        public IList<Employee> GetAll()
+        public async Task Update(Employee employee)
         {
-            throw new NotImplementedException();
+            var old = Get(employee.Id).Result;
+            old.FirstName = employee.FirstName;
+            old.LastName = employee.LastName;
+            old.Email = employee.Email;
+            old.Company = employee.Company;
+            old.Age = employee.Age;
+            old.IsDeleted = employee.IsDeleted;
+            await db.SaveChangesAsync();
         }
 
-        public Employee Read(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Employee> Read(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Employee> Read(int skip, int take)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Employee entity)
-        {
-            throw new NotImplementedException();
+            var employee = Get(id).Result;
+            employee.IsDeleted = true;
+            await db.SaveChangesAsync();
         }
     }
 }

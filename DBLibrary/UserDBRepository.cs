@@ -18,10 +18,12 @@ namespace DBLibrary
             db.Add(entity);
             await db.SaveChangesAsync();
         }
+
         public async Task<User> Get(int id)
         {
             return await db.FindAsync <User>(id);
         }
+
         public async Task Update(User entity)
         {
             var user = Get(entity.Id).Result;
@@ -32,7 +34,6 @@ namespace DBLibrary
             user.Age = entity.Age;
             user.IsDeleted = entity.IsDeleted;
             await db.SaveChangesAsync();
-
         }
 
         public async Task Delete(int id)
@@ -41,7 +42,5 @@ namespace DBLibrary
             user.IsDeleted = true;
             await db.SaveChangesAsync();
         }
-
-
     }
 }

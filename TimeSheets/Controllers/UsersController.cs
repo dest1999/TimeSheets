@@ -8,37 +8,37 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUserDBRepository _db;
+        private IUserDBRepository db;
         public UsersController(IUserDBRepository repository)
         {
-            _db = repository;
+            db = repository;
         }
 
         [HttpPost]
         public void AddNewUserToDB([FromBody] User user)
         {
-            _db.Create(user);
+            db.Create(user);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            return Ok(_db.Get(id) );
+            return Ok(db.Get(id).Result);
         }
 
         [HttpPut]
-        public void EditUser([FromBody] User user)
+        public void Edit([FromBody] User user)
         {
             if (user != null)
             {
-                _db.Update(user);
+                db.Update(user);
             }
         }
 
         [HttpDelete("{id}")]
         public void Delete([FromRoute] int id)
         {
-            _db.Delete(id);
+            db.Delete(id);
         }
 
 

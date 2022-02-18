@@ -35,6 +35,7 @@ namespace TimeSheets
 
 
             services.AddScoped<IUserDBRepository, UserDBRepository>();
+            services.AddScoped<IEmployeeDBRepository, EmployeeDBRepository>();
 
             services.AddSwaggerGen(c =>
             {
