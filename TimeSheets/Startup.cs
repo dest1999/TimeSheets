@@ -29,6 +29,7 @@ namespace TimeSheets
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //почему то миграции не проходят при таком коде, переместил подключение в SQLiteDBContext.OnConfiguring(...)
             //var connectionString = Configuration.GetConnectionString("SQLitedb");
             //services.AddDbContext<SQLiteDBContext>(options => options.UseSqlite(connectionString));
             services.AddDbContext<SQLiteDBContext>();
