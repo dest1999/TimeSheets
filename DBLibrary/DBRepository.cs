@@ -60,7 +60,9 @@ namespace DBLibrary
         };
 
         public void Create(Person entity)
-        {//кто следит за уникальностью id?
+        {
+            var lastPersonInDB = data[^1];
+            entity.Id = lastPersonInDB.Id + 1;
             data.Add(entity);
         }
 
@@ -76,9 +78,18 @@ namespace DBLibrary
 
         public Person Read(int id)
         {
-            return data.Where(p => p.Id == id).FirstOrDefault();
+            var person = data.Where(p => p.Id == id).FirstOrDefault();
+
+            if (person != null)
+            {
+                return person;
+            }
+            else
+            {
+                throw new Exception("Person not found");
+            }
         }
-        public IEnumerable<Person> Read(string name)
+        public IEnumerable<Person> Find(string name)
         {
             return data.Where(p => p.FirstName == name || p.LastName == name);
         }
