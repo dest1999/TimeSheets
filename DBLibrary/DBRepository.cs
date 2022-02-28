@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DBLibrary
 {
-    public class DBRepository : IDBRepository<Person>
+    public class DBRepository : IDBRepository
     {
         static List<Person> data = new () {
             new Person { Id = 1, FirstName = "Veda", LastName = "Richmond", Email = "ligula@necluctus.edu", Company = "Quisque Ac Libero LLP", Age = 42 },

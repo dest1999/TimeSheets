@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DBLibrary
 {
-    public interface IDBRepository<T> where T : Person
+    public interface IDBRepository
     {
         void Create(Person entity);
         Person Read(int id);
@@ -14,6 +14,6 @@ namespace DBLibrary
         IEnumerable<Person> Read(int skip, int take);
         void Update(Person entity);
         void Delete(int id);
-        IList<T> GetAll();
+        IList<Person> GetAll();
     }
 }
