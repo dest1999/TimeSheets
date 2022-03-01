@@ -47,18 +47,17 @@ namespace TimeSheets
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("SUPERSEKRETKEY ПОТОМ поменять сдесь")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("SUPERSEKRETKEY ПОТОМ ПЕРЕДЕЛАТЬ")),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+            
             //почему то миграции не проходят при таком коде, переместил подключение в SQLiteDBContext.OnConfiguring(...)
             //var connectionString = Configuration.GetConnectionString("SQLitedb");
             //services.AddDbContext<SQLiteDBContext>(options => options.UseSqlite(connectionString));
             services.AddDbContext<SQLiteDBContext>();
-
 
             services.AddScoped<IUserDBRepository, UserDBRepository>();
             services.AddScoped<IEmployeeDBRepository, EmployeeDBRepository>();
