@@ -7,7 +7,7 @@ using System;
 
 namespace TimeSheets.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -76,8 +76,8 @@ namespace TimeSheets.Controllers
             TokenResponce token = new ();
             var key = Startup.keyString;
    
-            token.RefreshToken = token.GenerateToken(login, key, DateTimeOffset.Now.AddMinutes(15));
-            token.AccessToken = token.GenerateToken(login, key, DateTimeOffset.Now.AddMinutes(1));
+            token.RefreshToken = token.GenerateToken(login, key, TimeSpan.FromMinutes(15));
+            token.AccessToken = token.GenerateToken(login, key, TimeSpan.FromMinutes(1));
             user.Token = token.RefreshToken;
             db.Update(user);
 

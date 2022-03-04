@@ -14,7 +14,7 @@ namespace TimeSheets
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
 
-        public string GenerateToken(string login, string key, DateTimeOffset dateTimeOffset)
+        public string GenerateToken(string login, string key, TimeSpan timeSpan)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityTokenDescriptor = new SecurityTokenDescriptor
@@ -23,8 +23,8 @@ namespace TimeSheets
                 {
                     new Claim(ClaimTypes.Name, login)
                 }),
-                Expires = DateTime.Now.AddTicks(dateTimeOffset.Ticks),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.Now.Add(timeSpan) ,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), SecurityAlgorithms.HmacSha256Signature)
             };
 
             SecurityToken token = tokenHandler.CreateToken(securityTokenDescriptor);
