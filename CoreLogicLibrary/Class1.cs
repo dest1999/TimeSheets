@@ -1,5 +1,5 @@
 ﻿using System;
-//devHW6
+//devHW7
 namespace CoreLogicLibrary
 {
     public class Class1
