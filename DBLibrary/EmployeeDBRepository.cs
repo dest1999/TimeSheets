@@ -23,7 +23,10 @@ namespace DBLibrary
         {
             return await db.FindAsync<Employee>(id);
         }
-
+        public Employee? GetByLoginAsync(string login)
+        {
+            return db.Employees.FirstOrDefault(e => e.Login == login);
+        }
         public async Task Update(Employee employee)
         {
             var old = Get(employee.Id).Result;
@@ -32,7 +35,10 @@ namespace DBLibrary
             old.Email = employee.Email;
             old.Company = employee.Company;
             old.Age = employee.Age;
-            old.IsDeleted = employee.IsDeleted;
+            //old.IsDeleted = employee.IsDeleted; для удаления отдельный метод
+            old.Login = employee.Login;
+            old.Password = employee.Password; 
+            old.Token = employee.Token;
             await db.SaveChangesAsync();
         }
 

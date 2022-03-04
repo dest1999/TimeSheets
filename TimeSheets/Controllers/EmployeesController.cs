@@ -1,9 +1,13 @@
 ﻿using DBLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CoreLogicLibrary;
+using System;
 
 namespace TimeSheets.Controllers
 {
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -19,7 +23,6 @@ namespace TimeSheets.Controllers
         {
             db.Create(employee);
         }
-
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
@@ -40,5 +43,46 @@ namespace TimeSheets.Controllers
         {
             db.Delete(id);
         }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult AuthenticateEmployee ([FromQuery] string user, string password)
+        {
+
+            var responce = Authenticate(user, password);
+            if (responce != null)
+            {
+                return Ok(responce);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        private TokenResponce? Authenticate(string login, string password)
+        {
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            {
+                return null;
+            }
+            var user = db.GetByLoginAsync(login);
+            if (user == null || user.Password != password)
+            {
+                return null;
+            }
+
+            TokenResponce token = new ();
+            var key = Startup.keyString;
+   
+            token.RefreshToken = token.GenerateToken(login, key, DateTimeOffset.Now.AddMinutes(15));
+            token.AccessToken = token.GenerateToken(login, key, DateTimeOffset.Now.AddMinutes(1));
+            user.Token = token.RefreshToken;
+            db.Update(user);
+
+            return token;
+        }
+
     }
 }

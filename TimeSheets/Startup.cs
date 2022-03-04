@@ -24,6 +24,7 @@ namespace TimeSheets
 {
     public class Startup
     {
+        public static readonly string keyString = "SUPERSEKRETKEY онрнл оепедекюрэ";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,7 +48,7 @@ namespace TimeSheets
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("SUPERSEKRETKEY онрнл оепедекюрэ")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(keyString)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
