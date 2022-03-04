@@ -13,5 +13,6 @@ namespace DBLibrary
         Task Update(Employee user);
         Task Delete(int id);
         Employee GetByLoginAsync(string login);
+        Employee GetByToken(string token);
     }
 }

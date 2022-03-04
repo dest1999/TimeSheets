@@ -44,14 +44,26 @@ namespace TimeSheets.Controllers
             db.Delete(id);
         }
 
+        [HttpPost("refresh-token")]
+        public IActionResult Refresh()
+        {
+            string oldToken = Request.Cookies["refreshToken"];
+            string newToken;
+
+            SetTokenCookie(newToken);
+
+        }
+
+
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult AuthenticateEmployee ([FromQuery] string user, string password)
         {
-
-            var responce = Authenticate(user, password);
+            TokenResponce responce = GenerateTokenResponce(user, password, db);
             if (responce != null)
             {
+                SetTokenCookie(responce.RefreshToken);
                 return Ok(responce);
             }
             else
@@ -60,28 +72,37 @@ namespace TimeSheets.Controllers
             }
         }
 
-        private TokenResponce? Authenticate(string login, string password)
+        private void SetTokenCookie(string token)
         {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
+        }
 
+        private TokenResponce? GenerateTokenResponce(string login, string password, IEmployeeDBRepository employeeDBRepository)
+        {
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 return null;
             }
-            var user = db.GetByLoginAsync(login);
+            var user = employeeDBRepository.GetByLoginAsync(login);
             if (user == null || user.Password != password)
             {
                 return null;
             }
 
-            TokenResponce token = new ();
+            TokenResponce tokenResponce = new ();
             var key = Startup.keyString;
    
-            token.RefreshToken = token.GenerateToken(login, key, TimeSpan.FromMinutes(15));
-            token.AccessToken = token.GenerateToken(login, key, TimeSpan.FromMinutes(1));
-            user.Token = token.RefreshToken;
+            tokenResponce.RefreshToken = tokenResponce.GenerateToken(login, key, TimeSpan.FromMinutes(15));
+            tokenResponce.AccessToken = tokenResponce.GenerateToken(login, key, TimeSpan.FromMinutes(1));
+            user.Token = tokenResponce.RefreshToken;
             db.Update(user);
 
-            return token;
+            return tokenResponce;
         }
 
     }

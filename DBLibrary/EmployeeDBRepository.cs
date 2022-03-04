@@ -27,6 +27,10 @@ namespace DBLibrary
         {
             return db.Employees.FirstOrDefault(e => e.Login == login);
         }
+        public Employee GetByToken(string token)
+        {
+            return db.Employees.FirstOrDefault(e =>e.Token == token);
+        }
         public async Task Update(Employee employee)
         {
             var old = Get(employee.Id).Result;
@@ -48,5 +52,6 @@ namespace DBLibrary
             employee.IsDeleted = true;
             await db.SaveChangesAsync();
         }
+
     }
 }

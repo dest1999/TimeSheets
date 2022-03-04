@@ -23,7 +23,7 @@ namespace TimeSheets
                 {
                     new Claim(ClaimTypes.Name, login)
                 }),
-                Expires = DateTime.Now.Add(timeSpan) ,
+                Expires = DateTime.Now.Add(timeSpan),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), SecurityAlgorithms.HmacSha256Signature)
             };
 
