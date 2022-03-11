@@ -22,16 +22,17 @@ namespace TimeSheets.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public Person Get([FromRoute] int id)
         {
-            return Ok(_dBRepository.Read(id));
+            //var 
+            return _dBRepository.Read(id);
         }
 
         [Route("search")]
         [HttpGet]
         public IActionResult Get([FromQuery(Name = "searchTerm")] string term)
         {
-            return Ok(_dBRepository.Read(term));
+            return Ok(_dBRepository.Find(term));
         }
 
         [HttpGet]
