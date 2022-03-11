@@ -1,6 +1,7 @@
 ﻿using DBLibrary;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace TimeSheets.Controllers
 {
@@ -16,14 +17,14 @@ namespace TimeSheets.Controllers
 
         [HttpPost]
         public void AddNewUserToDB([FromBody] User user)
-        {
+        {//TODO не используй в контроллере модели для базы, у них разное назначение, для передачи данных нужно создать отдельную модель и маппить на нее в контроллере
             db.Create(user);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public Task Get([FromRoute] int id)
         {
-            return Ok(db.Get(id).Result);
+            return db.Get(id);
         }
 
         [HttpPut]

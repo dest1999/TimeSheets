@@ -1,6 +1,7 @@
 ﻿using DBLibrary;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace TimeSheets.Controllers
 {
@@ -21,9 +22,9 @@ namespace TimeSheets.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public Task Get([FromRoute] int id)
         {
-            return Ok(db.Get(id).Result);
+            return db.Get(id);
         }
 
         [HttpPut]
