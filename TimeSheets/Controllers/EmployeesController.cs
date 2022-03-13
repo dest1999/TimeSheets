@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using CoreLogicLibrary;
 using System;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace TimeSheets.Controllers
 {
@@ -26,7 +27,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<Employee> Get([FromRoute] int id)
+        public Task<Employee> Get([FromRoute, Required, Range(1, int.MaxValue)] int id)
         {
             return db.Get(id);
         }
@@ -41,7 +42,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete([FromRoute] int id)
+        public void Delete([FromRoute, Required, Range(1, int.MaxValue)] int id)
         {
             db.Delete(id);
         }

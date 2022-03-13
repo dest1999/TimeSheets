@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace TimeSheets.Controllers
@@ -25,7 +26,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<User> Get([FromRoute] int id)
+        public Task<User> Get([FromRoute, Required, Range(1, int.MaxValue)] int id)
         {
             return db.Get(id);
         }
@@ -40,7 +41,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete([FromRoute] int id)
+        public void Delete([FromRoute, Required, Range(1, int.MaxValue)] int id)
         {
             db.Delete(id);
         }
