@@ -10,7 +10,7 @@ namespace DBLibrary
     {
         void Create(Person entity);
         Person Read(int id);
-        IEnumerable<Person> Read(string name);
+        IEnumerable<Person> Find(string name);
         IEnumerable<Person> Read(int skip, int take);
         void Update(Person entity);
         void Delete(int id);
