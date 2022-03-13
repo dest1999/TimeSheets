@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CoreLogicLibrary;
 using System;
+using System.Threading.Tasks;
 
 namespace TimeSheets.Controllers
 {
@@ -19,14 +20,15 @@ namespace TimeSheets.Controllers
         }
 
         [HttpPost]
-        public void AddNewEmployeeToDB([FromBody] Employee employee)
+        public void AddNewEmployeeToDB([FromBody] EmployeeDTO employee)
         {
             db.Create(employee);
         }
+
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public Task<Employee> Get([FromRoute] int id)
         {
-            return Ok(db.Get(id).Result);
+            return db.Get(id);
         }
 
         [HttpPut]
@@ -44,23 +46,26 @@ namespace TimeSheets.Controllers
             db.Delete(id);
         }
 
+        [AllowAnonymous]
         [HttpPost("refresh-token")]
         public IActionResult Refresh()
         {
             string oldToken = Request.Cookies["refreshToken"];
-            string newToken;
-
-            SetTokenCookie(newToken);
-
+            var employee = db.GetByToken(oldToken);
+            if (employee == null)
+            {
+                return BadRequest("Re-enter your login and password");
+            }
+            TokenResponce responce = GenerateTokenResponce(employee.Login, employee.Password, db);
+            SetTokenCookie(responce.RefreshToken);
+            return Ok(responce);
         }
-
-
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult AuthenticateEmployee ([FromQuery] string user, string password)
+        public IActionResult AuthenticateEmployee ([FromQuery] string login, string password)
         {
-            TokenResponce responce = GenerateTokenResponce(user, password, db);
+            TokenResponce responce = GenerateTokenResponce(login, password, db);
             if (responce != null)
             {
                 SetTokenCookie(responce.RefreshToken);
@@ -88,7 +93,7 @@ namespace TimeSheets.Controllers
             {
                 return null;
             }
-            var user = employeeDBRepository.GetByLoginAsync(login);
+            var user = employeeDBRepository.GetByLogin(login);
             if (user == null || user.Password != password)
             {
                 return null;
