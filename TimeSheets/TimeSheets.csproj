@@ -7,9 +7,11 @@
 
   <ItemGroup>
     <None Remove="SQLiteDB.db" />
+    <None Remove="sqlitestudio-2.1.4.exe - Ярлык.lnk" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

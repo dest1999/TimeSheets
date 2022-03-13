@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,17 @@ namespace DBLibrary
     public class UserDBRepository : IUserDBRepository
     {
         private SQLiteDBContext db;
+        private Mapper mapper;
         public UserDBRepository(SQLiteDBContext context)
         {
             db = context;
+            MapperConfiguration mapperConfiguration = new(cfg => cfg.CreateMap<UserDTO, User>());
+            mapper = new Mapper(mapperConfiguration);
         }
-        public async Task Create(User entity)
+        public async Task Create(UserDTO entity)
         {
+            User user = mapper.Map<User>(entity);
+            user.Id = db.Users.Count() + 1;
             db.Add(entity);
             await db.SaveChangesAsync();
         }
@@ -24,6 +30,14 @@ namespace DBLibrary
             return await db.FindAsync <User>(id);
         }
 
+        public User GetByLogin(string login)
+        {
+            return db.Users.FirstOrDefault(x => x.Login == login);
+        }
+        public User GetByToken(string token)
+        {
+            return db.Users.FirstOrDefault(x => x.Token == token);
+        }
         public async Task Update(User entity)
         {
             var user = Get(entity.Id).Result;
