@@ -45,7 +45,6 @@ namespace DBLibrary
             old.Email = employee.Email;
             old.Company = employee.Company;
             old.Age = employee.Age;
-            //old.IsDeleted = employee.IsDeleted; для удаления отдельный метод
             old.Login = employee.Login;
             old.Password = employee.Password; 
             old.Token = employee.Token;

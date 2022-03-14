@@ -15,7 +15,7 @@ namespace DBLibrary
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Employee> Employees { get; set; }
-
+        public DbSet<Sheet> Sheets { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             //options.UseSqlite("Data Source=SQLite.db");
