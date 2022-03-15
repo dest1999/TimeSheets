@@ -3,6 +3,7 @@ using System;
 using DBLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TimeSheets.Migrations
 {
     [DbContext(typeof(SQLiteDBContext))]
-    partial class SQLiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220314154854_SheetsId")]
+    partial class SheetsId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -73,18 +75,20 @@ namespace TimeSheets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Employee")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("User")
+                    b.Property<int>("UserOwner")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sheets");
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Sheet");
                 });
 
             modelBuilder.Entity("DBLibrary.User", b =>
@@ -123,6 +127,18 @@ namespace TimeSheets.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DBLibrary.Sheet", b =>
+                {
+                    b.HasOne("DBLibrary.Employee", null)
+                        .WithMany("Sheets")
+                        .HasForeignKey("EmployeeId");
+                });
+
+            modelBuilder.Entity("DBLibrary.Employee", b =>
+                {
+                    b.Navigation("Sheets");
                 });
 #pragma warning restore 612, 618
         }
